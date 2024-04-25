@@ -57,7 +57,6 @@ exports.signup = async (req, res) => {
 
     // Find the most recent OTP for the email
     const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-    console.log(response);
     if (response.length === 0) {
       // OTP not found for the email
       return res.status(400).json({
@@ -86,6 +85,7 @@ exports.signup = async (req, res) => {
       about: null,
       contactNumber: null,
     });
+    const image =`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
     const user = await User.create({
       firstName,
       lastName,
@@ -95,7 +95,7 @@ exports.signup = async (req, res) => {
       accountType: accountType,
       approved: approved,
       additionalDetails: profileDetails._id,
-      image: "", //DICE BEAR
+      image: image
     });
 
     return res.status(200).json({
